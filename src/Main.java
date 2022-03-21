@@ -1,39 +1,45 @@
+import controllers.tracker.TaskManager;
+import model.tracker.Epic;
+import model.tracker.Subtask;
+import model.tracker.Task;
 
 public class Main {
 
     public static void main(String[] args) {
         TaskManager taskManager = new TaskManager();
         System.out.println("Создаем две задачи");
-        Task task1 = new Task("task1", "task1 description");
-        taskManager.createNewTask(task1);
-        Task task2 = new Task("task2", "task2 description");
-        taskManager.createNewTask(task2);
+        Task task1 = new Task();
+        taskManager.createNewTask(task1,"task1", "task1 description");
+        Task task2 = new Task();
+        taskManager.createNewTask(task2,"task2", "task2 description");
         System.out.println("Создаем эпик с двумя подзадачами");
-        Epic epic1 = new Epic("epic1", "epic1 description");
-        taskManager.createNewEpic(epic1);
-        Subtask subtask1 = new Subtask("subtask1", "subtask2 description", epic1.getId());
-        taskManager.createNewSubtask(subtask1);
-        Subtask subtask2 = new Subtask("subtask2", "subtask2 description", epic1.getId());
-        taskManager.createNewSubtask(subtask2);
+        Epic epic1 = new Epic();
+        taskManager.createNewEpic(epic1,"epic1", "epic1 description");
+        Subtask subtask1 = new Subtask();
+        taskManager.createNewSubtask(subtask1,"subtask1", "subtask2 description", epic1.getId());
+        Subtask subtask2 = new Subtask();
+        taskManager.createNewSubtask(subtask2,"subtask2", "subtask2 description", epic1.getId());
         System.out.println("Создаем эпик с одной подзадачей");
-        Epic epic2 = new Epic("epic2", "epic2 description");
-        taskManager.createNewEpic(epic2);
-        Subtask subtask3 = new Subtask("subtask3", "subtask3 description", epic2.getId());
-        taskManager.createNewSubtask(subtask3);
+        Epic epic2 = new Epic();
+        taskManager.createNewEpic(epic2,"epic2", "epic2 description");
+        Subtask subtask3 = new Subtask();
+        taskManager.createNewSubtask(subtask3,"subtask3", "subtask3 description", epic2.getId());
         System.out.println("Распечатали списки");
         System.out.println(taskManager.getTaskList());
         System.out.println(taskManager.getSubtaskList());
         System.out.println(taskManager.getEpicList());
         System.out.println("--------------");
         System.out.println("Обновим статус обычной задачи, по одной подзадачи эпиков.");
-        Task newTask1 = new Task("task1new", "task1new desc", "IN_PROGRESS");
-        taskManager.updateTask(task1.getId(), newTask1);
+        Task newTask1 = new Task();
+        taskManager.updateTask(task1.getId(), newTask1, "task1new", "task1new desc", "IN_PROGRESS");
         Subtask newSubtask1 =
-                new Subtask("subtask1new", "subtask1new  desc", "DONE", subtask1.yourEpicId);
-        taskManager.updateSubtask(subtask1.getId(), newSubtask1);
+                new Subtask();
+        taskManager.updateSubtask(subtask1.getId(), newSubtask1,
+                "subtask1new", "subtask1new  desc", "DONE", subtask1.getYourEpicId());
         Subtask newSubtask3 =
-                new Subtask("subtask3new", "subtask3new  desc", "DONE", subtask3.yourEpicId);
-        taskManager.updateSubtask(subtask3.getId(), newSubtask3);
+                new Subtask();
+        taskManager.updateSubtask(subtask3.getId(), newSubtask3,
+                "subtask3new", "subtask3new  desc", "DONE", subtask3.getYourEpicId());
         System.out.println(taskManager.getTaskList());
         System.out.println(taskManager.getSubtaskList());
         System.out.println(taskManager.getEpicList());

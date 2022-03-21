@@ -1,3 +1,9 @@
+package controllers.tracker;
+
+import model.tracker.Epic;
+import model.tracker.Subtask;
+import model.tracker.Task;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -42,7 +48,7 @@ public class TaskManager {
     public void clearSubtaskStorage() { // при очистке списка позадач - все эпики переходят в статус "NEW"
         subtaskStorage.clear();
         for (int key : epicStorage.keySet()) {
-            epicStorage.get(key).status = "NEW";
+            epicStorage.get(key).setStatus("NEW");
         }
     }
 
@@ -71,16 +77,17 @@ public class TaskManager {
     }
 
     public void removeSubtaskById(int id) { //при удалении подзадачи - проверяем, не обновился ли статус эпика
-        int epicId = subtaskStorage.get(id).yourEpicId;
+        int epicId = subtaskStorage.get(id).getYourEpicId();
         subtaskStorage.remove(id);
-        updateEpic(epicId, getEpicById(epicId));
+        Epic yourEpic = getEpicById(epicId);
+        updateEpic(epicId, yourEpic, yourEpic.getTitle(), yourEpic.getDescription());
     }
 
     public void removeEpicById(int id) { // при удалении эпика удаляются все его подзадачи
         ArrayList<Integer> idSubtasks = new ArrayList<>(); // список айди подзадач эпика
         if (epicStorage.containsKey(id)) {
             for (int yourEpicKey : subtaskStorage.keySet()) {
-                if (subtaskStorage.get(yourEpicKey).yourEpicId == id) {
+                if (subtaskStorage.get(yourEpicKey).getYourEpicId() == id) {
                     idSubtasks.add(subtaskStorage.get(yourEpicKey).getId()); //добавляем айди в список
                 }
             }
@@ -93,24 +100,37 @@ public class TaskManager {
 
     // Методы создания задач разных типов:
 
-    public void createNewTask(Task task) {
+    public void createNewTask(Task task, String title, String description) {
         globalTaskId += 1;
         task.setId(globalTaskId);
+        task.setTitle(title);
+        task.setDescription(description);
+        task.setStatus("NEW");
         taskStorage.put(globalTaskId, task);
     }
 
-    public void createNewSubtask(Subtask subtask) { // при создании новой подзадачи - обновляем статус эпика
-        if (epicStorage.containsKey(subtask.yourEpicId)) { // проверка, есть ли эпик, часть которого будет подзадача
+    public void createNewSubtask(Subtask subtask, String title, String description, int yourEpicId) {
+        // при создании новой подзадачи - обновляем статус эпика
+        if (epicStorage.containsKey(yourEpicId)) { // проверка, есть ли эпик,
+            // часть которого будет подзадача
             globalTaskId += 1;
             subtask.setId(globalTaskId);
+            subtask.setTitle(title);
+            subtask.setDescription(description);
+            subtask.setYourEpicId(yourEpicId);
+            subtask.setStatus("NEW");
             subtaskStorage.put(globalTaskId, subtask);
-            updateEpic(subtask.yourEpicId, getEpicById(subtask.yourEpicId));
+            Epic yourEpic = getEpicById(yourEpicId);
+            updateEpic(yourEpicId, yourEpic, yourEpic.getTitle(), yourEpic.getDescription());
         }
     }
 
-    public void createNewEpic(Epic epic) {
+    public void createNewEpic(Epic epic, String title, String description) {
         globalTaskId += 1;
         epic.setId(globalTaskId);
+        epic.setTitle(title);
+        epic.setDescription(description);
+        epic.setStatus("NEW");
         epicStorage.put(globalTaskId, epic);
     }
 
@@ -119,7 +139,7 @@ public class TaskManager {
     public ArrayList<Subtask> subtasksOfEpic(int epicId) {
         ArrayList<Subtask> subtasks = new ArrayList<>();
         for (int key : subtaskStorage.keySet()) {
-            if (subtaskStorage.get(key).yourEpicId == epicId) {
+            if (subtaskStorage.get(key).getYourEpicId() == epicId) {
                 subtasks.add(subtaskStorage.get(key));
             }
         }
@@ -128,25 +148,39 @@ public class TaskManager {
 
     // Методы обновления задач разного типа:
 
-    public void updateTask(int id, Task task) {
+    public void updateTask(int id, Task task, String title, String description, String status) {
         taskStorage.put(id, task);
         task.setId(id);
+        task.setTitle(title);
+        task.setDescription(description);
+        task.setStatus(status);
     }
 
-    public void updateSubtask(int id, Subtask subtask) { //обновляем подзадачу - обновляем эпик
+    public void updateSubtask(int id, Subtask subtask, String title,
+                              String description, String status, int yourEpicId) {
+        //обновляем подзадачу - обновляем эпик
         subtaskStorage.put(id, subtask);
         subtask.setId(id);
-        updateEpic(subtask.yourEpicId, getEpicById(subtask.yourEpicId));
+        subtask.setTitle(title);
+        subtask.setDescription(description);
+        subtask.setYourEpicId(yourEpicId);
+        subtask.setStatus(status);
+        Epic yourEpic = getEpicById(subtask.getYourEpicId());
+        updateEpic(subtask.getYourEpicId(), yourEpic, yourEpic.getTitle(), yourEpic.getDescription());
     }
 
-    public void updateEpic(int id, Epic epic) {
-        epicStorage.put(id, epic); // возможность обновления эпика (Названия, описания), без изменения статуса
+    public void updateEpic(int id, Epic epic, String title,
+                           String description) {
+        epicStorage.put(id, epic);
+        epic.setTitle(title);
+        epic.setDescription(description);
+        epic.setId(id);// возможность обновления эпика (Названия, описания), без изменения статуса
         ArrayList<Subtask> subtasks = subtasksOfEpic(id);
         int completedSubtasksCounter = 0; // счетчик, необходимый для подсчета
         for (Subtask subtask : subtasks) {
-            if (subtask.status.equals("DONE")) {
+            if (subtask.getStatus().equals("DONE")) {
                 completedSubtasksCounter += 1;
-            } else if (subtask.status.equals("NEW")) {
+            } else if (subtask.getStatus().equals("NEW")) {
                 completedSubtasksCounter -= 1;
             }
         }
@@ -157,14 +191,14 @@ public class TaskManager {
          */
         if (subtasks.size() != 0) {
             if (completedSubtasksCounter == subtasks.size()) {
-                getEpicById(id).status = "DONE";
+                getEpicById(id).setStatus("DONE");
             } else if (-1 * completedSubtasksCounter == subtasks.size()) {
-                getEpicById(id).status = " NEW";
+                getEpicById(id).setStatus("NEW");
             } else {
-                getEpicById(id).status = "IN_PROGRESS";
+                getEpicById(id).setStatus("IN_PROGRESS");
             }
         } else { // случай, возникающий, например, при удалении всех подзадач
-            getEpicById(id).status = " NEW";
+            getEpicById(id).setStatus("NEW");
         }
     }
 }
