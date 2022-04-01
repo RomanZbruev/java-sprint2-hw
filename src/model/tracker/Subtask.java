@@ -16,12 +16,12 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "model.tracker.Subtask{" +
+        return "Subtask{" +
                 "title='" + getTitle() + '\'' +
                 ", description='" + getDescription() + '\'' +
                 ", epicId=" + yourEpicId +
                 ", subtaskId=" + getId() +
-                ", status='" + getStatus() + '\'' +
+                ", status='" + getStatus().toString() + '\'' +
                 '}';
     }
     // перезаписываем методы equals и hashcode, так как добавляется одно дополнительное поле
