@@ -3,7 +3,6 @@ package controllers.tracker;
 import model.tracker.Epic;
 import model.tracker.Subtask;
 import model.tracker.Task;
-
 import java.util.ArrayList;
 
 public interface TaskManager {
@@ -40,10 +39,10 @@ public interface TaskManager {
 
     ArrayList<Subtask> subtasksOfEpic(int epicId);
 
-    void updateTask(int id, Task task, String title, String description, InMemoryTaskManager.Status status);
+    void updateTask(int id, Task task, String title, String description, Status status);
 
     void updateSubtask(int id, Subtask subtask, String title,
-                       String description, InMemoryTaskManager.Status status, int yourEpicId);
+                       String description, Status status, int yourEpicId);
 
     void updateEpic(int id, Epic epic, String title,
                     String description);

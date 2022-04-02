@@ -1,6 +1,6 @@
 package model.tracker;
 
-import controllers.tracker.InMemoryTaskManager;
+import controllers.tracker.Status;
 import java.util.Objects;
 
 public class Task {
@@ -8,7 +8,7 @@ public class Task {
     private String title;
     private String description;
     private int id;
-    private InMemoryTaskManager.Status status;
+    private Status status;
 
     public int getId() {
         return id;
@@ -34,11 +34,11 @@ public class Task {
         this.description = description;
     }
 
-    public InMemoryTaskManager.Status getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(InMemoryTaskManager.Status status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

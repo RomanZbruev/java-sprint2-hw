@@ -1,5 +1,6 @@
 import controllers.tracker.InMemoryTaskManager;
 import controllers.tracker.Managers;
+import controllers.tracker.Status;
 import model.tracker.Epic;
 import model.tracker.Subtask;
 import model.tracker.Task;
@@ -36,13 +37,13 @@ public class Main {
         System.out.println("Обновим статус обычной задачи, одной подзадачи эпика.");
         Task newTask1 = new Task();
         taskManager.updateTask(task1.getId(), newTask1, "task1new",
-                "task1new desc", InMemoryTaskManager.Status.IN_PROGRESS);
+                "task1new desc", Status.IN_PROGRESS);
         System.out.println("История: " +taskManager.getHistoryManager().getHistory());
         System.out.println("-------------------- ");
         taskManager.getTaskById(task1.getId());
         Subtask newSubtask1 = new Subtask();
         taskManager.updateSubtask(subtask1.getId(), newSubtask1, "subtask1new", "subtask1new desc",
-                InMemoryTaskManager.Status.DONE, epic1.getId());
+                Status.DONE, epic1.getId());
         System.out.println("История: " +taskManager.getHistoryManager().getHistory());
         System.out.println("-------------------- ");
         taskManager.getTaskById(task1.getId());

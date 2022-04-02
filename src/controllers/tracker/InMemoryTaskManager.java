@@ -1,28 +1,21 @@
 package controllers.tracker;
 
-import controllers.history.InMemoryHistoryManager;
+import controllers.history.HistoryManager;
 import model.tracker.Epic;
 import model.tracker.Subtask;
 import model.tracker.Task;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class InMemoryTaskManager implements TaskManager{
+public class InMemoryTaskManager implements TaskManager {
     // Создаем три хранилища для задач разных типов и поле для хранения айди
     HashMap<Integer, Task> taskStorage = new HashMap<>();
     HashMap<Integer, Subtask> subtaskStorage = new HashMap<>();
     HashMap<Integer, Epic> epicStorage = new HashMap<>();
     int globalTaskId = 0;
-    InMemoryHistoryManager historyManager = (InMemoryHistoryManager) Managers.getDefaultHistory(); /* явное приведение
-     на случай, если далее будут добавлены доп методы*/
+    HistoryManager historyManager = Managers.getDefaultHistory();
 
-    public enum Status {
-        NEW,
-        IN_PROGRESS,
-        DONE
-    }
-
-    public InMemoryHistoryManager getHistoryManager() {
+    public HistoryManager getHistoryManager() {
         return historyManager;
     }
 
@@ -67,6 +60,7 @@ public class InMemoryTaskManager implements TaskManager{
             epicStorage.get(key).setStatus(Status.NEW);
         }
     }
+
     @Override
     public void clearEpicStorage() {
         epicStorage.clear();
