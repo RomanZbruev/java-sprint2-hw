@@ -89,12 +89,14 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void removeTaskById(int id) {
         taskStorage.remove(id);
+        historyManager.remove(id);
     }
 
     @Override
     public void removeSubtaskById(int id) { //при удалении подзадачи - проверяем, не обновился ли статус эпика
         int epicId = subtaskStorage.get(id).getYourEpicId();
         subtaskStorage.remove(id);
+        historyManager.remove(id);
         Epic yourEpic = getEpicById(epicId);
         updateEpic(epicId, yourEpic, yourEpic.getTitle(), yourEpic.getDescription());
     }
@@ -112,6 +114,7 @@ public class InMemoryTaskManager implements TaskManager {
                 removeSubtaskById(idSub);
             }
             epicStorage.remove(id);
+            historyManager.remove(id);
         }
     }
 

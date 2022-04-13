@@ -19,8 +19,8 @@ public class Subtask extends Task {
         return "Subtask{" +
                 "title='" + getTitle() + '\'' +
                 ", description='" + getDescription() + '\'' +
-                ", epicId=" + yourEpicId +
-                ", subtaskId=" + getId() +
+                ", yourEpicId=" + yourEpicId +
+                ", Id=" + getId() +
                 ", status='" + getStatus().toString() + '\'' +
                 '}';
     }

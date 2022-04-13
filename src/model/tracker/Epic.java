@@ -7,7 +7,7 @@ public class Epic extends Task {
         return "Epic{" +
                 "title='" + getTitle() + '\'' +
                 ", description='" + getDescription() + '\'' +
-                ", epicId=" + getId() +
+                ", Id=" + getId() +
                 ", status='" + getStatus().toString() + '\'' +
                 '}';
     }
