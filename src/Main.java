@@ -18,7 +18,7 @@ public class Main {
         Epic epic1 = new Epic();
         taskManager.createNewEpic(epic1,"epic1", "epic1 description");
         Subtask subtask1 = new Subtask();
-        taskManager.createNewSubtask(subtask1,"subtask1", "subtask2 description", epic1.getId());
+        taskManager.createNewSubtask(subtask1,"subtask1", "subtask1 description", epic1.getId());
         Subtask subtask2 = new Subtask();
         taskManager.createNewSubtask(subtask2,"subtask2", "subtask2 description", epic1.getId());
         Subtask subtask3 = new Subtask();
@@ -26,7 +26,9 @@ public class Main {
         System.out.println("Создаем эпик без подзадач");
         Epic epic2 = new Epic();
         taskManager.createNewEpic(epic2,"epic2", "epic2 description");
-        System.out.println("-------------------- ");
+        System.out.println("История:");
+        System.out.println(taskManager.getHistoryManager().getHistory()); //печатается эпик, так как при добавлении
+        //подзадач используется метод getEpic()
         System.out.println("Распечатали списки");
         System.out.println(taskManager.getTaskList());
         System.out.println(taskManager.getSubtaskList());

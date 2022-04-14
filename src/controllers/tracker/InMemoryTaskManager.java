@@ -9,9 +9,9 @@ import java.util.HashMap;
 
 public class InMemoryTaskManager implements TaskManager {
     // Создаем три хранилища для задач разных типов и поле для хранения айди
-    HashMap<Integer, Task> taskStorage = new HashMap<>();
-    HashMap<Integer, Subtask> subtaskStorage = new HashMap<>();
-    HashMap<Integer, Epic> epicStorage = new HashMap<>();
+    private final HashMap<Integer, Task> taskStorage = new HashMap<>();
+    private final HashMap<Integer, Subtask> subtaskStorage = new HashMap<>();
+    private final HashMap<Integer, Epic> epicStorage = new HashMap<>();
     int globalTaskId = 0;
     HistoryManager historyManager = Managers.getDefaultHistory();
 
