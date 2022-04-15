@@ -13,7 +13,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         private Node head;
         private Node tail;
         private final HashMap<Integer,Node> nodes = new HashMap<>();
-        private final List<Integer> order = new ArrayList<>(); //храним порядок добавления- по Id
 
         public void linkedLast(Task task){
             final Node oldTail = tail;
@@ -30,8 +29,13 @@ public class InMemoryHistoryManager implements HistoryManager {
 
         public ArrayList<Task> getTasks(){
             ArrayList<Task> tasks = new ArrayList<>();
-            for(Integer i : order){
-                tasks.add(nodes.get(i).data);
+            if (head != null) { // если head = null - история вызовов пуста, сразу возвращаем пустой список
+                Node counter = head; // заносим в переменную значение head, затем циклом проходим по всем узлам
+                tasks.add(counter.data);
+                while (counter.next != null) {
+                    counter = counter.next;
+                    tasks.add(counter.data);
+                }
             }
             return tasks;
         }
@@ -39,8 +43,6 @@ public class InMemoryHistoryManager implements HistoryManager {
         public void removeNode(Node node){
             if (nodes.containsValue(node)){
                 nodes.remove(node.data.getId()); //удаляем из списка узлов
-                order.remove((Integer) node.data.getId()); /*здесь и далее - удаление данных о самом
-                последнем обращении к задаче (очистка от дубликатов) */
                 // Далее - логика перемещения указателей
                 if (node.prev == null && node.next == null){ //Случай удаления единственного узла
                     tail = null;
@@ -49,12 +51,11 @@ public class InMemoryHistoryManager implements HistoryManager {
                 else if (node.prev == null){ /*Крайний левый случай. Делаем головой второй элемент, удаляем ссылку
                     на первый */
                     node.next.prev = null;
-                    head = node;
-                    nodes.put(node.data.getId(), node);
+                    head = node.next;
                 }
                 else if (node.next == null){ //крайний правый случай
                     node.prev.next = null;
-                    tail = node;
+                    tail = node.prev;
                 }
 
                 else { //случай "в середине"
@@ -67,15 +68,10 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     @Override
     public void add(Task task) {
-        if (customLinkedList.nodes.containsKey(task.getId())){ /*проверка на предыдущие вызовы задачи
-         и удаление вызовов*/
-
-            customLinkedList.order.remove((Integer) task.getId());
+        if (customLinkedList.nodes.containsKey(task.getId())){
             customLinkedList.removeNode(customLinkedList.nodes.get(task.getId()));
         }
         customLinkedList.linkedLast(task);
-        customLinkedList.order.add(task.getId());
-
     }
 
     @Override
