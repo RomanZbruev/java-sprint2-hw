@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FileBackedTasksManager extends InMemoryTaskManager {
-    File historyFile;
+    private final File historyFile;
 
     public FileBackedTasksManager(File historyFile) {
         this.historyFile = historyFile;
@@ -259,7 +259,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     public static void main(String[] args) {
-        File file = new File("src/controllers/tracker/history.csv");
+        File file = new File("./src/storage/history.csv");
         FileBackedTasksManager taskManager = new FileBackedTasksManager(file);
         System.out.println("Создаем две задачи");
         Task task1 = new Task();
