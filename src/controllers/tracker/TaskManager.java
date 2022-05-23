@@ -31,11 +31,11 @@ public interface TaskManager {
 
     void removeEpicById(int id);
 
-    void createNewTask(Task task, String title, String description);
+    void createNewTask(Task task);
 
-    void createNewSubtask(Subtask subtask, String title, String description, int yourEpicId);
+    void createNewSubtask(Subtask subtask, int yourEpicId);
 
-    void createNewEpic(Epic epic, String title, String description);
+    void createNewEpic(Epic epic);
 
     ArrayList<Subtask> subtasksOfEpic(int epicId);
 
