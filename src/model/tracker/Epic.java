@@ -1,9 +1,23 @@
 package model.tracker;
 
+import java.time.LocalDateTime;
+import java.util.Objects;
+
 public class Epic extends Task {
+    private LocalDateTime endTime;
 
     public Epic(String title, String description){
-        super(title,description);
+        this.setTitle(title);
+        this.setDescription(description);
+    }
+
+    @Override
+    public LocalDateTime getEndTime(){
+        return endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime){
+        this.endTime = endTime;
     }
 
     @Override
@@ -13,6 +27,23 @@ public class Epic extends Task {
                 ", description='" + getDescription() + '\'' +
                 ", Id=" + getId() +
                 ", status='" + getStatus().toString() + '\'' +
+                ", duration=" + getDuration() +
+                ", startTime=" + getStartTime() +
+                ", endTime=" + getEndTime() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Epic epic = (Epic) o;
+        return Objects.equals(endTime, epic.endTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), endTime);
     }
 }

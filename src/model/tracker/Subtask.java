@@ -1,13 +1,13 @@
 package model.tracker;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Subtask extends Task {
 
     private int yourEpicId;
-
-    public Subtask(String title, String description){
-        super(title,description);
+    public Subtask(String title, String description,long duration, LocalDateTime startTime){
+        super(title,description,duration,startTime);
     }
 
     public int getYourEpicId() {
@@ -26,6 +26,8 @@ public class Subtask extends Task {
                 ", yourEpicId=" + yourEpicId +
                 ", Id=" + getId() +
                 ", status='" + getStatus().toString() + '\'' +
+                ", duration=" + getDuration() +
+                ", startTime=" + getStartTime() +
                 '}';
     }
     // перезаписываем методы equals и hashcode, так как добавляется одно дополнительное поле

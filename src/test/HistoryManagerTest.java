@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,9 +26,11 @@ public class HistoryManagerTest {
 
     @Test
     public void DuplicateInHistoryManager(){
-        Task task1 = new Task("t1","d1");
+        Task task1 = new Task("t1","d1",1,
+                LocalDateTime.of(2000,1,1,1,1));
         task1.setId(1); //айди нужен для работы методов менеджера истории
-        Task task2 = new Task("t2","d2");
+        Task task2 = new Task("t2","d2",1,
+                LocalDateTime.of(2000,1,1,1,1));
         task2.setId(2);
         historyManager.add(task1);
         historyManager.add(task2);
@@ -38,11 +41,14 @@ public class HistoryManagerTest {
 
     @Test
     public void BeginningRemoveHistoryManager(){
-        Task task1 = new Task("t","d");
+        Task task1 = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         task1.setId(1);
-        Task task2 = new Task("t2","d2");
+        Task task2 = new Task("t2","d2",1,
+                LocalDateTime.of(2000,1,1,1,1));
         task2.setId(2);
-        Task task3 = new Task("t3","d3");
+        Task task3 = new Task("t3","d3",1,
+                LocalDateTime.of(2000,1,1,1,1));
         task3.setId(3);
         historyManager.add(task1);
         historyManager.add(task2);
@@ -54,11 +60,14 @@ public class HistoryManagerTest {
 
     @Test
     public void MiddleRemoveHistoryManager(){
-        Task task1 = new Task("t","d");
+        Task task1 = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         task1.setId(1);
-        Task task2 = new Task("t2","d2");
+        Task task2 = new Task("t2","d2",1,
+                LocalDateTime.of(2000,1,1,1,1));
         task2.setId(2);
-        Task task3 = new Task("t3","d3");
+        Task task3 = new Task("t3","d3",1,
+                LocalDateTime.of(2000,1,1,1,1));
         task3.setId(3);
         historyManager.add(task1);
         historyManager.add(task2);
@@ -70,11 +79,14 @@ public class HistoryManagerTest {
 
     @Test
     public void EndRemoveHistoryManager(){
-        Task task1 = new Task("t3","d3");
+        Task task1 = new Task("t3","d3",1,
+                LocalDateTime.of(2000,1,1,1,1));
         task1.setId(1);
-        Task task2 = new Task("t3","d3");
+        Task task2 = new Task("t3","d3",1,
+                LocalDateTime.of(2000,1,1,1,1));
         task2.setId(2);
-        Task task3 = new Task("t3","d3");
+        Task task3 = new Task("t3","d3",1,
+                LocalDateTime.of(2000,1,1,1,1));
         task3.setId(3);
         historyManager.add(task1);
         historyManager.add(task2);

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import controllers.tracker.Status;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,8 @@ public class TaskManagerTest {
 
     @Test
     public void standardWorkTaskListTest(){
-        Task task = new Task("t","d");
+        Task task = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewTask(task);
         Assertions.assertEquals(List.of(task),taskManager.getTaskList());
     }
@@ -48,7 +50,8 @@ public class TaskManagerTest {
     public void standardWorkSubtaskListTest(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic); // так как нельзя создавать подзадачи без эпика
-        Subtask subtask = new Subtask("t","d");
+        Subtask subtask = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(subtask,epic.getId());
         Assertions.assertEquals(List.of(subtask),taskManager.getSubtaskList());
     }
@@ -82,7 +85,8 @@ public class TaskManagerTest {
     public void standardWorkClearSubtaskListTest(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask task = new Subtask("t","d");
+        Subtask task = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(task,epic.getId());
         taskManager.clearSubtaskStorage();
         Assertions.assertEquals(List.of(),taskManager.getTaskList());
@@ -90,7 +94,8 @@ public class TaskManagerTest {
 
     @Test
     public void standardWorkClearTaskListTest(){
-        Task task = new Task("t","d");
+        Task task = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewTask(task);
         taskManager.clearTaskStorage();
         Assertions.assertEquals(List.of(),taskManager.getTaskList());
@@ -121,9 +126,11 @@ public class TaskManagerTest {
 
     @Test
     public void standardWorkGetTaskByIdTaskListTest(){
-        Task task = new Task("t","d");
+        Task task = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewTask(task);
-        Task expected = new Task("t","d");
+        Task expected = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         expected.setId(1);
         expected.setStatus(Status.NEW);
         Assertions.assertEquals(expected,taskManager.getTaskById(task.getId()));
@@ -133,9 +140,11 @@ public class TaskManagerTest {
     public void standardWorkGetSubtaskByIdTaskListTest(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask subtask = new Subtask("t","d");
+        Subtask subtask = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(subtask,epic.getId()); // айди 2
-        Subtask expected = new Subtask("t","d");
+        Subtask expected = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         expected.setId(2);
         expected.setStatus(Status.NEW);
         expected.setYourEpicId(1);
@@ -154,7 +163,8 @@ public class TaskManagerTest {
 
     @Test
     public void incorrectIdGetTaskByIdTaskListTest(){
-        Task task = new Task("t","d");
+        Task task = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewTask(task);
         Assertions.assertNull(taskManager.getTaskById(task.getId()+1));
     }
@@ -163,7 +173,8 @@ public class TaskManagerTest {
     public void incorrectIdGetSubtaskByIdTaskListTest(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask subtask = new Subtask("t","d");
+        Subtask subtask = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(subtask,epic.getId()); // айди 2
         Assertions.assertNull(taskManager.getSubtaskById(subtask.getId()+1111));
     }
@@ -195,7 +206,8 @@ public class TaskManagerTest {
 
     @Test
     public void standardWorkRemoveTaskByIdTaskListTest(){
-        Task task = new Task("t","d");
+        Task task = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewTask(task);
         taskManager.removeTaskById(task.getId());
         Assertions.assertEquals(List.of(),taskManager.getTaskList());
@@ -205,7 +217,8 @@ public class TaskManagerTest {
     public void standardWorkRemoveSubtaskByIdTaskListTest(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask subtask = new Subtask("t","d");
+        Subtask subtask = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(subtask,epic.getId()); // айди 2
         taskManager.removeSubtaskById(subtask.getId());
         Assertions.assertEquals(List.of(),taskManager.getSubtaskList());
@@ -221,10 +234,12 @@ public class TaskManagerTest {
 
     @Test
     public void incorrectIdRemoveTaskByIdTaskListTest(){
-        Task task = new Task("t","d");
+        Task task = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewTask(task);
         taskManager.removeTaskById(2222);
-        Task expected = new Task("t","d");
+        Task expected = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         expected.setStatus(Status.NEW);
         expected.setId(1);
         Assertions.assertEquals(List.of(expected),taskManager.getTaskList());
@@ -234,10 +249,12 @@ public class TaskManagerTest {
     public void incorrectIdRemoveSubtaskByIdTaskListTest(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask subtask = new Subtask("t","d");
+        Subtask subtask = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(subtask,epic.getId()); // айди 2
         taskManager.removeSubtaskById(232131);
-        Subtask expected = new Subtask("t","d");
+        Subtask expected = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         expected.setId(2);
         expected.setStatus(Status.NEW);
         expected.setYourEpicId(1);
@@ -257,9 +274,11 @@ public class TaskManagerTest {
 
     @Test
     public void createTaskInEmptyTaskListTest(){
-        Task task = new Task("t","d");
+        Task task = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewTask(task);
-        Task expected = new Task("t","d");
+        Task expected = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         expected.setId(1);
         expected.setStatus(Status.NEW);
         Assertions.assertEquals(List.of(expected),taskManager.getTaskList());
@@ -268,7 +287,8 @@ public class TaskManagerTest {
     @Test
     public void createSubtaskInEmptyTaskListTest(){ // при попытке добавления подзадачи без задачи добавление
         // не будет производиться
-        Subtask subtask = new Subtask("t","d");
+        Subtask subtask = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(subtask,1);
         Assertions.assertEquals(List.of(),taskManager.getSubtaskList());
     }
@@ -285,14 +305,19 @@ public class TaskManagerTest {
 
     @Test
     public void standardWorkCreateTaskTest(){
-        Task task = new Task("t","d");
+        Task task = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewTask(task);
-        Task task1 = new Task("t","d");
+        Task task1 = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,10));
+
         taskManager.createNewTask(task1);
-        Task expected = new Task("t","d");
+        Task expected = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         expected.setStatus(Status.NEW);
         expected.setId(1);
-        Task expected1 = new Task("t","d");
+        Task expected1 = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,10));
         expected1.setStatus(Status.NEW);
         expected1.setId(2);
         Assertions.assertEquals(List.of(expected,expected1),taskManager.getTaskList());
@@ -302,9 +327,11 @@ public class TaskManagerTest {
     public void standardWorkCreateSubtaskTest(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask subtask = new Subtask("t","d");
+        Subtask subtask = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(subtask,epic.getId());
-        Subtask expected = new Subtask("t","d");
+        Subtask expected = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         expected.setId(2);
         expected.setStatus(Status.NEW);
         expected.setYourEpicId(1);
@@ -335,9 +362,11 @@ public class TaskManagerTest {
     public void standardWorkSubtasksOfEpic(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask subtask = new Subtask("t","d");
+        Subtask subtask = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(subtask,epic.getId());
-        Subtask expected = new Subtask("t","d");
+        Subtask expected = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         expected.setStatus(Status.NEW);
         expected.setId(2);
         expected.setYourEpicId(1);
@@ -348,7 +377,8 @@ public class TaskManagerTest {
     public void incorrectIdWorkSubtasksOfEpic(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask subtask = new Subtask("t","d");
+        Subtask subtask = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(subtask,epic.getId());
         Assertions.assertEquals(List.of(),taskManager.subtasksOfEpic(82828));
     }
@@ -358,21 +388,26 @@ public class TaskManagerTest {
         // закрепленному в подзадаче айди эпика - исходный эпик
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask subtask = new Subtask("t","d");
+        Subtask subtask = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(subtask,epic.getId());
         Assertions.assertEquals(epic,taskManager.getEpicById(subtask.getYourEpicId()));
     }
 
     @Test
     public void updateTaskInEmptyTaskListTest(){  // нет задач - нечего обновлять
-        taskManager.updateTask(1,new Task("t","d"),"t!","d!",Status.DONE);
+        taskManager.updateTask(1,new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1)),"t!","d!",Status.DONE,1,
+                LocalDateTime.of(2000,1,1,1,1));
         Assertions.assertEquals(List.of(),taskManager.getTaskList());
     }
 
     @Test
     public void updateSubtaskInEmptyTaskListTest(){  // нет задач - нечего обновлять
-        taskManager.updateSubtask(1,new Subtask("t","d")
-                ,"t!","d!",Status.DONE,3);
+        taskManager.updateSubtask(1,new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1)),
+                "t!","d!",Status.DONE,3,1,
+                LocalDateTime.of(2000,1,1,1,1));
         Assertions.assertEquals(List.of(),taskManager.getSubtaskList());
     }
 
@@ -384,10 +419,13 @@ public class TaskManagerTest {
 
     @Test
     public void standardWorkUpdateTaskTest(){
-        Task task = new Task("t","d");
+        Task task = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewTask(task);
-        taskManager.updateTask(task.getId(),task,task.getTitle(),task.getDescription(),Status.IN_PROGRESS);
-        Task expected = new Task("t","d");
+        taskManager.updateTask(task.getId(),task,task.getTitle(),task.getDescription(),Status.IN_PROGRESS,1,
+                LocalDateTime.of(2000,1,1,1,1));
+        Task expected = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         expected.setStatus(Status.IN_PROGRESS);
         expected.setId(1);
         Assertions.assertEquals(expected,task);
@@ -397,11 +435,14 @@ public class TaskManagerTest {
     public void standardWorkUpdateSubtaskTest(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask task = new Subtask("t","d");
+        Subtask task = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(task,epic.getId());
         taskManager.updateSubtask(task.getId(),task,task.getTitle(),task.getDescription()
-                ,Status.IN_PROGRESS, task.getYourEpicId());
-        Subtask expected = new Subtask("t","d");
+                ,Status.IN_PROGRESS, task.getYourEpicId(),1,
+                LocalDateTime.of(2000,1,1,1,1));
+        Subtask expected = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         expected.setStatus(Status.IN_PROGRESS);
         expected.setId(2);
         expected.setYourEpicId(1);
@@ -421,10 +462,13 @@ public class TaskManagerTest {
 
     @Test
     public void incorrectIdUpdateTask(){
-        Task task = new Task("t","d");
+        Task task = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewTask(task);
-        taskManager.updateTask(2323,task,task.getTitle(),task.getDescription(),Status.IN_PROGRESS);
-        Task expected = new Task("t","d");
+        taskManager.updateTask(2323,task,task.getTitle(),task.getDescription(),Status.IN_PROGRESS,1,
+                LocalDateTime.of(2000,1,1,1,1));
+        Task expected = new Task("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         expected.setStatus(Status.NEW);
         expected.setId(1);
         Assertions.assertEquals(expected,task);
@@ -434,11 +478,14 @@ public class TaskManagerTest {
     public void incorrectIdUpdateSubtaskTest(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask task = new Subtask("t","d");
+        Subtask task = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(task,epic.getId());
         taskManager.updateSubtask(53535,task,task.getTitle(),task.getDescription()
-                ,Status.IN_PROGRESS, task.getYourEpicId());
-        Subtask expected = new Subtask("t","d");
+                ,Status.IN_PROGRESS, task.getYourEpicId(),1,
+                LocalDateTime.of(2000,1,1,1,1));
+        Subtask expected = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         expected.setStatus(Status.NEW);
         expected.setId(2);
         expected.setYourEpicId(1);
@@ -460,13 +507,18 @@ public class TaskManagerTest {
     public void updateEpicStatusOneInProgressSubtaskTest(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask task = new Subtask("t","d");
+        Subtask task = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(task,epic.getId());
         taskManager.updateSubtask(task.getId(),task,task.getTitle(),task.getDescription()
-                ,Status.IN_PROGRESS, task.getYourEpicId());
+                ,Status.IN_PROGRESS, task.getYourEpicId(),1,
+                LocalDateTime.of(2000,1,1,1,1));
         Epic expected = new Epic("t","d");
         expected.setStatus(Status.IN_PROGRESS);
         expected.setId(1);
+        expected.setStartTime(LocalDateTime.of(2000,1,1,1,1));
+        expected.setDuration(1);
+        expected.setEndTime(LocalDateTime.of(2000,1,1,1,2));
         Assertions.assertEquals(expected,epic);
     }
 
@@ -474,13 +526,18 @@ public class TaskManagerTest {
     public void updateEpicStatusOneDoneSubtaskTest(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask task = new Subtask("t","d");
+        Subtask task = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(task,epic.getId());
         taskManager.updateSubtask(task.getId(),task,task.getTitle(),task.getDescription()
-                ,Status.DONE, task.getYourEpicId());
+                ,Status.DONE, task.getYourEpicId(),1,
+                LocalDateTime.of(2000,1,1,1,1));
         Epic expected = new Epic("t","d");
         expected.setStatus(Status.DONE);
         expected.setId(1);
+        expected.setStartTime(LocalDateTime.of(2000,1,1,1,1));
+        expected.setDuration(1);
+        expected.setEndTime(LocalDateTime.of(2000,1,1,1,2));
         Assertions.assertEquals(expected,epic);
     }
 
@@ -488,15 +545,21 @@ public class TaskManagerTest {
     public void updateEpicStatusTwoSubtasksNewAndInProgressTest(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask task1 = new Subtask("t","d");
+        Subtask task1 = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(task1,epic.getId());
-        Subtask task = new Subtask("t","d");
+        Subtask task = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,2));
         taskManager.createNewSubtask(task,epic.getId());
         taskManager.updateSubtask(task.getId(),task,task.getTitle(),task.getDescription()
-                ,Status.IN_PROGRESS, task.getYourEpicId());
+                ,Status.IN_PROGRESS, task.getYourEpicId(),1,
+                LocalDateTime.of(2000,1,1,1,2));
         Epic expected = new Epic("t","d");
         expected.setStatus(Status.IN_PROGRESS);
         expected.setId(1);
+        expected.setStartTime(LocalDateTime.of(2000,1,1,1,1));
+        expected.setDuration(2);
+        expected.setEndTime(LocalDateTime.of(2000,1,1,1,3));
         Assertions.assertEquals(expected,epic);
     }
 
@@ -504,15 +567,21 @@ public class TaskManagerTest {
     public void updateEpicStatusTwoSubtasksNewAndDoneTest(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask task1 = new Subtask("t","d");
+        Subtask task1 = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(task1,epic.getId());
-        Subtask task = new Subtask("t","d");
+        Subtask task = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,2));
         taskManager.createNewSubtask(task,epic.getId());
         taskManager.updateSubtask(task.getId(),task,task.getTitle(),task.getDescription()
-                ,Status.DONE, task.getYourEpicId());
+                ,Status.DONE, task.getYourEpicId(),1,
+                LocalDateTime.of(2000,1,1,1,2));
         Epic expected = new Epic("t","d");
         expected.setStatus(Status.IN_PROGRESS);
         expected.setId(1);
+        expected.setStartTime(LocalDateTime.of(2000,1,1,1,1));
+        expected.setDuration(2);
+        expected.setEndTime(LocalDateTime.of(2000,1,1,1,3));
         Assertions.assertEquals(expected,epic);
     }
 
@@ -520,17 +589,24 @@ public class TaskManagerTest {
     public void updateEpicStatusTwoSubtasksBothInProgressTest(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask task1 = new Subtask("t","d");
+        Subtask task1 = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(task1,epic.getId());
         taskManager.updateSubtask(task1.getId(),task1,task1.getTitle(),task1.getDescription()
-                ,Status.IN_PROGRESS, task1.getYourEpicId());
-        Subtask task = new Subtask("t","d");
+                ,Status.IN_PROGRESS, task1.getYourEpicId(),1,
+                LocalDateTime.of(2000,1,1,1,1));
+        Subtask task = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,2));
         taskManager.createNewSubtask(task,epic.getId());
         taskManager.updateSubtask(task.getId(),task,task.getTitle(),task.getDescription()
-                ,Status.IN_PROGRESS, task.getYourEpicId());
+                ,Status.IN_PROGRESS, task.getYourEpicId(),1,
+                LocalDateTime.of(2000,1,1,1,2));
         Epic expected = new Epic("t","d");
         expected.setStatus(Status.IN_PROGRESS);
         expected.setId(1);
+        expected.setStartTime(LocalDateTime.of(2000,1,1,1,1));
+        expected.setDuration(2);
+        expected.setEndTime(LocalDateTime.of(2000,1,1,1,3));
         Assertions.assertEquals(expected,epic);
     }
 
@@ -538,17 +614,50 @@ public class TaskManagerTest {
     public void updateEpicStatusTwoSubtasksBothDoneTest(){
         Epic epic = new Epic("t","d");
         taskManager.createNewEpic(epic);
-        Subtask task1 = new Subtask("t","d");
+        Subtask task1 = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
         taskManager.createNewSubtask(task1,epic.getId());
         taskManager.updateSubtask(task1.getId(),task1,task1.getTitle(),task1.getDescription()
-                ,Status.DONE, task1.getYourEpicId());
-        Subtask task = new Subtask("t","d");
+                ,Status.DONE, task1.getYourEpicId(),1,
+                LocalDateTime.of(2000,1,1,1,1));
+        Subtask task = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,2));
         taskManager.createNewSubtask(task,epic.getId());
         taskManager.updateSubtask(task.getId(),task,task.getTitle(),task.getDescription()
-                ,Status.DONE, task.getYourEpicId());
+                ,Status.DONE, task.getYourEpicId(),1,
+                LocalDateTime.of(2000,1,1,1,2));
         Epic expected = new Epic("t","d");
         expected.setStatus(Status.DONE);
         expected.setId(1);
+        expected.setStartTime(LocalDateTime.of(2000,1,1,1,1));
+        expected.setDuration(2);
+        expected.setEndTime(LocalDateTime.of(2000,1,1,1,3));
+        Assertions.assertEquals(expected,epic);
+    }
+
+    @Test
+    public void updateEpicStatusTwoSubtasksBothDoneAndClearTest(){
+        Epic epic = new Epic("t","d");
+        taskManager.createNewEpic(epic);
+        Subtask task1 = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,1));
+        taskManager.createNewSubtask(task1,epic.getId());
+        taskManager.updateSubtask(task1.getId(),task1,task1.getTitle(),task1.getDescription()
+                ,Status.DONE, task1.getYourEpicId(),1,
+                LocalDateTime.of(2000,1,1,1,1));
+        Subtask task = new Subtask("t","d",1,
+                LocalDateTime.of(2000,1,1,1,2));
+        taskManager.createNewSubtask(task,epic.getId());
+        taskManager.updateSubtask(task.getId(),task,task.getTitle(),task.getDescription()
+                ,Status.DONE, task.getYourEpicId(),1,
+                LocalDateTime.of(2000,1,1,1,2));
+        taskManager.clearSubtaskStorage();
+        Epic expected = new Epic("t","d");
+        expected.setStatus(Status.NEW);
+        expected.setId(1);
+        expected.setStartTime(LocalDateTime.of(2000,1,1,1,1));
+        expected.setDuration(2);
+        expected.setEndTime(LocalDateTime.of(2000,1,1,1,3));
         Assertions.assertEquals(expected,epic);
     }
 }

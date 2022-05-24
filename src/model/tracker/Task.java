@@ -1,6 +1,8 @@
 package model.tracker;
 
 import controllers.tracker.Status;
+
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Task {
@@ -9,10 +11,17 @@ public class Task {
     private String description;
     private int id;
     private Status status;
+    private long duration;
+    private LocalDateTime startTime;
 
-    public Task(String title,String description){
+    public Task(String title, String description, long duration, LocalDateTime startTime){
         this.title = title;
         this.description = description;
+        this.duration = duration;
+        this.startTime = startTime;
+    }
+
+    public Task() {
     }
 
     public int getId() {
@@ -47,28 +56,52 @@ public class Task {
         this.status = status;
     }
 
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        this.startTime = startTime;
+    }
+
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public long getDuration() {
+        return duration;
+    }
+
+    public LocalDateTime getEndTime() {
+        if(startTime!=null){
+        return startTime.plusMinutes(duration);}
+        return null;
+    }
+
     @Override
     public String toString() {
         return "Task{" +
                 "title='" + title + '\'' +
                 ", description='" + description + '\'' +
-                ", Id=" + id +
-                ", status='" + status.toString() + '\'' +
+                ", id=" + id +
+                ", status=" + status +
+                ", duration=" + duration +
+                ", startTime=" + startTime +
                 '}';
     }
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Task task = (Task) o;
-        return id == task.id && Objects.equals(title, task.title)
-                && Objects.equals(description, task.description) && Objects.equals(status, task.status);
+        return id == task.id && duration == task.duration
+                && Objects.equals(title, task.title) && Objects.equals(description, task.description)
+                && status == task.status && Objects.equals(startTime, task.startTime);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, description, id, status);
+        return Objects.hash(title, description, id, status, duration, startTime);
     }
 }
