@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TaskManagerTest<T extends TaskManager> {
-    T taskManager;
+    protected T taskManager;
 
     @Test
     public void emptyTaskListTest() {
