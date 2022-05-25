@@ -1,4 +1,5 @@
 package controllers.tracker;
+
 import controllers.history.HistoryManager;
 import model.tracker.Epic;
 import model.tracker.Subtask;
@@ -46,6 +47,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         save();
         return task;
     }
+
     // методы get также переписываем, так как при их вызове меняется история => сохраняем в файл
     @Override
     public Subtask getSubtaskById(int id) {
@@ -80,7 +82,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void createNewTask(Task task){
+    public void createNewTask(Task task) {
         super.createNewTask(task);
         save();
     }
@@ -100,15 +102,15 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     @Override
     public void updateTask(int id, Task task, String title, String description, Status status, long duration,
                            LocalDateTime startTime) {
-        super.updateTask(id, task, title, description, status,duration, startTime);
+        super.updateTask(id, task, title, description, status, duration, startTime);
         save();
     }
 
     @Override
     public void updateSubtask(int id, Subtask subtask, String title,
-                              String description, Status status, int yourEpicId,long duration,
+                              String description, Status status, int yourEpicId, long duration,
                               LocalDateTime startTime) {
-        super.updateSubtask(id, subtask, title, description, status, yourEpicId,duration,startTime);
+        super.updateSubtask(id, subtask, title, description, status, yourEpicId, duration, startTime);
         save();
     }
 
@@ -149,18 +151,18 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     // методы toString для всех видов задач
     String toString(Task task) {
         return (task.getId() + "," + Type.TASK + "," + task.getTitle() + "," + task.getStatus()
-                + "," + task.getDescription()+","+task.getStartTime()+","+task.getDuration()+","+task.getEndTime());
+                + "," + task.getDescription() + "," + task.getStartTime() + "," + task.getDuration() + "," + task.getEndTime());
     }
 
     String toString(Epic task) {
         return (task.getId() + "," + Type.EPIC + "," + task.getTitle() + "," + task.getStatus()
-                + "," + task.getDescription()+","+task.getStartTime()+","+task.getDuration()+","+task.getEndTime());
+                + "," + task.getDescription() + "," + task.getStartTime() + "," + task.getDuration() + "," + task.getEndTime());
     }
 
     String toString(Subtask task, int EpicId) {
         return (task.getId() + "," + Type.SUBTASK + "," + task.getTitle() + "," + task.getStatus()
-                + "," + task.getDescription() + "," + task.getStartTime()+","+task.getDuration()+","
-                +task.getEndTime()+","+ EpicId);
+                + "," + task.getDescription() + "," + task.getStartTime() + "," + task.getDuration() + ","
+                + task.getEndTime() + "," + EpicId);
     }
 
     // метод восстановления задачи из строки файла
@@ -168,24 +170,25 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         String[] split = value.split(",");
         if (split.length == 8) { // если в строке 5 элементов - либо задача, либо эпик
             if (split[1].equals(Type.TASK.toString())) {
-                Task task = new Task(split[2],split[4],Integer.parseInt(split[6]),LocalDateTime.parse(split[5]));
+                Task task = new Task(split[2], split[4], Integer.parseInt(split[6]), LocalDateTime.parse(split[5]));
                 task.setId(Integer.parseInt(split[0]));
                 task.setStatus(Status.valueOf(split[3]));
                 return task;
             } else if (split[1].equals(Type.EPIC.toString())) {
-                Epic task = new Epic(split[2],split[4]);
+                Epic task = new Epic(split[2], split[4]);
                 task.setId(Integer.parseInt(split[0]));
                 task.setStatus(Status.valueOf(split[3]));
-                if(!split[5].equals("null")){ // null возникает в случае если у эпика нет подзадач
-                task.setStartTime(LocalDateTime.parse(split[5]));}
+                if (!split[5].equals("null")) { // null возникает в случае если у эпика нет подзадач
+                    task.setStartTime(LocalDateTime.parse(split[5]));
+                }
                 task.setDuration(Integer.parseInt(split[6]));
-                if(!split[7].equals("null")){ // null возникает в случае если у эпика нет подзадач
-                task.setEndTime(LocalDateTime.parse(split[7]));}
+                if (!split[7].equals("null")) { // null возникает в случае если у эпика нет подзадач
+                    task.setEndTime(LocalDateTime.parse(split[7]));
+                }
                 return task;
             }
-        }
-        else if (split.length == 9) {
-            Subtask subtask = new Subtask(split[2],split[4],Integer.parseInt(split[6]),LocalDateTime.parse(split[5]));
+        } else if (split.length == 9) {
+            Subtask subtask = new Subtask(split[2], split[4], Integer.parseInt(split[6]), LocalDateTime.parse(split[5]));
             subtask.setId(Integer.parseInt(split[0]));
             subtask.setStatus(Status.valueOf(split[3]));
             subtask.setDescription(split[4]);
@@ -227,8 +230,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
             String[] split = ourData.split("\n"); // разбиваем на строки
             if (split.length > 1) { // проверка на случай пустого менеджера задач
                 List<String> splitData = new ArrayList<>(Arrays.asList(split).subList(1, split.length));
-                if(splitData.contains("")){ // проверка на случай пустой истории (нет истории - нет пустой строки)
-                history = fromStringHistoryManager(splitData.get(splitData.size() - 1));
+                if (splitData.contains("")) { // проверка на случай пустой истории (нет истории - нет пустой строки)
+                    history = fromStringHistoryManager(splitData.get(splitData.size() - 1));
                 } //переводим
                 // последнюю строку в массив айди для истории
                 int maxId = 0;
