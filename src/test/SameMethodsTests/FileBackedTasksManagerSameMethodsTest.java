@@ -1,3 +1,5 @@
+package SameMethodsTests;
+
 import controllers.tracker.FileBackedTasksManager;
 import org.junit.jupiter.api.BeforeEach;
 
