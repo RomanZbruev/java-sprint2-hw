@@ -3,14 +3,14 @@ package controllers.tracker.util;
 import controllers.history.HistoryManager;
 import controllers.history.InMemoryHistoryManager;
 import controllers.tracker.FileBackedTasksManager;
-import controllers.tracker.InMemoryTaskManager;
 import controllers.tracker.TaskManager;
+import controllers.tracker.server.HTTPTaskManager;
 
 import java.io.File;
 
 public class Managers {
     public static TaskManager getDefault() {
-        return new InMemoryTaskManager();
+        return new HTTPTaskManager("http://localhost:8078");
     }
 
     public static HistoryManager getDefaultHistory() {

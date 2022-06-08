@@ -15,7 +15,7 @@ import java.util.List;
 
 public class HTTPTaskManager extends FileBackedTasksManager {
 
-    KVTaskClient taskClient;
+    private final KVTaskClient taskClient;
     private static final Gson gson = new Gson();
     public HTTPTaskManager(String url) {
         super(new File("./src/storage/historyTest.csv"));
