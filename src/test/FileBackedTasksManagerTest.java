@@ -74,11 +74,11 @@ public class FileBackedTasksManagerTest {
     @Test
     public void saveAndLoadStandardWorkWhenEpicWithSubtaskListAndNonEmptyHistoryTest() {
         Epic epic = new Epic("t", "d");
+        fileBackedTasksManager.createNewEpic(epic);
         Subtask subtask = new Subtask("t", "d", 1,
-                LocalDateTime.of(2000, 1, 1, 1, 1));
-        fileBackedTasksManager.createNewEpic(epic);// при создании происходит запись
+                LocalDateTime.of(2000, 1, 1, 1, 1),epic.getId());
+        fileBackedTasksManager.createNewSubtask(subtask);
         fileBackedTasksManager.getEpicById(epic.getId()); //непустая история
-        fileBackedTasksManager.createNewSubtask(subtask, epic.getId());
         try {
             BufferedReader br = new BufferedReader(new FileReader(String.valueOf(file.toPath())));
             br.readLine(); // читаем первую линию, с обозначением параметров

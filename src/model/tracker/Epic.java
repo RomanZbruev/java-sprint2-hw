@@ -13,7 +13,8 @@ public class Epic extends Task {
 
     @Override
     public LocalDateTime getEndTime(){
-        return endTime;
+       if (endTime!=null) return endTime;
+       return null;
     }
 
     public void setEndTime(LocalDateTime endTime){

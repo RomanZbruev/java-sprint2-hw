@@ -88,8 +88,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void createNewSubtask(Subtask subtask, int yourEpicId) {
-        super.createNewSubtask(subtask, yourEpicId);
+    public void createNewSubtask(Subtask subtask) {
+        super.createNewSubtask(subtask);
         save();
     }
 
@@ -100,24 +100,20 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     @Override
-    public void updateTask(int id, Task task, String title, String description, Status status, long duration,
-                           LocalDateTime startTime) {
-        super.updateTask(id, task, title, description, status, duration, startTime);
+    public void updateTask(Task task) {
+        super.updateTask(task);
         save();
     }
 
     @Override
-    public void updateSubtask(int id, Subtask subtask, String title,
-                              String description, Status status, int yourEpicId, long duration,
-                              LocalDateTime startTime) {
-        super.updateSubtask(id, subtask, title, description, status, yourEpicId, duration, startTime);
+    public void updateSubtask(Subtask subtask) {
+        super.updateSubtask(subtask);
         save();
     }
 
     @Override
-    public void updateEpic(int id, Epic epic, String title,
-                           String description) {
-        super.updateEpic(id, epic, title, description);
+    public void updateEpic(Epic epic) {
+        super.updateEpic(epic);
         save();
     }
 
@@ -188,11 +184,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 return task;
             }
         } else if (split.length == 9) {
-            Subtask subtask = new Subtask(split[2], split[4], Integer.parseInt(split[6]), LocalDateTime.parse(split[5]));
+            Subtask subtask = new Subtask(split[2], split[4], Integer.parseInt(split[6]),
+                    LocalDateTime.parse(split[5]),Integer.parseInt(split[8]));
             subtask.setId(Integer.parseInt(split[0]));
             subtask.setStatus(Status.valueOf(split[3]));
             subtask.setDescription(split[4]);
-            subtask.setYourEpicId(Integer.parseInt(split[8]));
             return subtask;
         }
         return null;
@@ -239,24 +235,21 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                     // айди задачи - в список айди задач данного типа (См.InMemoryTaskManager)
                     if (data.contains(Type.SUBTASK.toString())) {
                         Subtask task = (Subtask) fbtm.fromString(data);
-                        fbtm.getAllTasks().put(task.getId(), task);
-                        fbtm.getSubtaskIds().add(task.getId());
+                        fbtm.getSubtasks().put(task.getId(), task);
                         fbtm.getSortedTaskAndSubtasks().add(task);
                         if (task.getId() > maxId) {
                             maxId = task.getId();
                         }
                     } else if (data.contains(Type.TASK.toString())) {
                         Task task = fbtm.fromString(data);
-                        fbtm.getAllTasks().put(task.getId(), task);
-                        fbtm.getTaskIds().add(task.getId());
+                        fbtm.getTasks().put(task.getId(), task);
                         fbtm.getSortedTaskAndSubtasks().add(task);
                         if (task.getId() > maxId) {
                             maxId = task.getId();
                         }
                     } else if (data.contains(Type.EPIC.toString())) {
                         Epic task = (Epic) fbtm.fromString(data);
-                        fbtm.getAllTasks().put(task.getId(), task);
-                        fbtm.getEpicIds().add(task.getId());
+                        fbtm.getEpics().put(task.getId(), task);
                         if (task.getId() > maxId) {
                             maxId = task.getId();
                         }
@@ -266,11 +259,11 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
                 }
                 fbtm.setGlobalTaskId(maxId);
                 for (int i : history) { //восстанавливаем историю с помощью айди подзадач, по очереди добавляя задачи
-                    if (fbtm.getTaskIds().contains(i)) {
+                    if (fbtm.getTasks().containsKey(i)) {
                         fbtm.historyManager.add(fbtm.getTaskById(i));
-                    } else if (fbtm.getSubtaskIds().contains(i)) {
+                    } else if (fbtm.getSubtasks().containsKey(i)) {
                         fbtm.historyManager.add(fbtm.getSubtaskById(i));
-                    } else if (fbtm.getEpicIds().contains(i)) {
+                    } else if (fbtm.getEpics().containsKey(i)) {
                         fbtm.historyManager.add(fbtm.getEpicById(i));
                     }
                 }

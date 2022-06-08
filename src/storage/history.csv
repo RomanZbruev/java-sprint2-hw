@@ -1,7 +1,6 @@
 id,type,name,status,description,startTime,duration,endTime,epic
-1,TASK,task1,NEW,task1 description,2000-01-01T01:00,1,2000-01-01T01:01
-2,TASK,task2,NEW,task2 description,2000-01-01T01:01,1,2000-01-01T01:02
-3,EPIC,epic1,NEW,epic1 description,2000-01-01T00:00,1,2000-01-01T00:01
-4,SUBTASK,subtask1,NEW,subtask1 description,2000-01-01T00:00,1,2000-01-01T00:01,3
+2,TASK,t,NEW,d,2000-01-01T01:02,1,2000-01-01T01:03
+1,EPIC,t,NEW,d,2000-02-01T01:01,1,2000-02-01T01:02
+3,SUBTASK,t,NEW,d,2000-02-01T01:01,1,2000-02-01T01:02,1
 
-2,3,1
+2,1

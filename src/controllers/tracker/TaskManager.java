@@ -1,11 +1,9 @@
 package controllers.tracker;
 
-import controllers.IntersectionCheckException;
 import model.tracker.Epic;
 import model.tracker.Subtask;
 import model.tracker.Task;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public interface TaskManager {
@@ -36,20 +34,17 @@ public interface TaskManager {
 
     void createNewTask (Task task);
 
-    void createNewSubtask(Subtask subtask, int yourEpicId);
+    void createNewSubtask(Subtask subtask);
 
     void createNewEpic(Epic epic);
 
     ArrayList<Subtask> subtasksOfEpic(int epicId);
 
-    void updateTask(int id, Task task, String title, String description, Status status,
-                    long duration, LocalDateTime startTime);
+    void updateTask(Task task);
 
-    void updateSubtask(int id, Subtask subtask, String title,
-                       String description, Status status, int yourEpicId,long duration, LocalDateTime startTime);
+    void updateSubtask(Subtask subtask);
 
-    void updateEpic(int id, Epic epic, String title,
-                    String description);
+    void updateEpic(Epic epic);
 }
 
 
